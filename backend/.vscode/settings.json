@@ -1,0 +1,37 @@
+{
+    // ---- normal JS/TS IntelliSense: ON (default behaviour) ----
+    "editor.quickSuggestions": {
+        "other": "on",
+        "comments": "off",
+        "strings": "off"
+    },
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.parameterHints.enabled": true,
+    "editor.snippetSuggestions": "inline",
+    "editor.acceptSuggestionOnEnter": "on",
+    "editor.suggest.selectionMode": "always",
+    // sirf file ke random words wale suggestions band — real JS suggestions nahi
+    "editor.wordBasedSuggestions": "off",
+
+    // ---- AI ghost text: OFF ----
+    "editor.inlineSuggest.enabled": false,
+    "editor.inlineSuggest.showToolbar": "never",
+
+    // ---- Copilot ----
+    "github.copilot.enable": {
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
+    },
+    "github.copilot.nextEditSuggestions.enabled": false,
+    "github.copilot.editor.enableAutoCompletions": false,
+
+    // ---- Continue ----
+    "continue.enableTabAutocomplete": false,
+
+    // ---- Tabnine ----
+    "tabnine.disableLineRegex": [
+        ".*"
+    ]
+}
