@@ -10,7 +10,7 @@ const app = express();
 // Enable Cross-Origin Resource Sharing for frontend
 app.use(
   cors({
-    origin: '*',
+    origin: 'https://hunarai-task.vercel.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
