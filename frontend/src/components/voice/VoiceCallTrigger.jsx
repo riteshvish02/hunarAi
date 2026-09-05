@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { PhoneOutgoing, Loader2, Sparkles, AlertCircle, CheckCircle2, User, Phone, Briefcase } from 'lucide-react';
-import { apiService } from '../services/api';
+import { PhoneOutgoing, Loader2, AlertCircle, CheckCircle2, User, Phone, Briefcase, MessageSquare } from 'lucide-react';
+import { apiService } from '../../services/api';
 
 const VoiceCallTrigger = ({ agents, selectedAgent, onSelectAgent, onCallInitiated }) => {
   const [candidateName, setCandidateName] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [roleTitle, setRoleTitle] = useState('Senior Fullstack Engineer');
   const [keyRequirements, setKeyRequirements] = useState('React, TypeScript, Node.js, 4+ years exp');
+  const [sendMultiChannelFollowup, setSendMultiChannelFollowup] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -35,11 +36,12 @@ const VoiceCallTrigger = ({ agents, selectedAgent, onSelectAgent, onCallInitiate
           role_title: roleTitle.trim(),
           job_title: roleTitle.trim(),
           key_requirements: keyRequirements.trim(),
+          multichannel_whatsapp: sendMultiChannelFollowup,
         },
       };
 
       const res = await apiService.triggerCall(payload);
-      setSuccessMessage(`Call queued successfully with ID: ${res.data?.id}`);
+      setSuccessMessage(`Call initiated successfully! Call ID: ${res.data?.id}`);
       if (onCallInitiated) {
         onCallInitiated(res.data);
       }
@@ -66,7 +68,7 @@ const VoiceCallTrigger = ({ agents, selectedAgent, onSelectAgent, onCallInitiate
 
         {selectedAgent && (
           <div className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-xl">
-            <span className="text-xs text-slate-400 font-medium">Selected Agent:</span>
+            <span className="text-xs text-slate-400 font-medium">Selected:</span>
             <span className="text-xs font-bold text-indigo-300">{selectedAgent.name}</span>
           </div>
         )}
@@ -108,7 +110,7 @@ const VoiceCallTrigger = ({ agents, selectedAgent, onSelectAgent, onCallInitiate
           >
             {agents.map((agent) => (
               <option key={agent.id} value={agent.id} className="bg-dark-900 text-slate-200">
-                {agent.name} — ({agent.voice_persona || agent.persona_name || 'AI Recruiter'} / {agent.language})
+                {agent.name} — ({agent.persona_name || agent.voice_persona || 'AI Recruiter'} / {agent.language})
               </option>
             ))}
           </select>
@@ -155,7 +157,7 @@ const VoiceCallTrigger = ({ agents, selectedAgent, onSelectAgent, onCallInitiate
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-              Job Title / Role (Passed to Voice Agent)
+              Job Title / Role
             </label>
             <div className="relative">
               <Briefcase className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
@@ -171,7 +173,7 @@ const VoiceCallTrigger = ({ agents, selectedAgent, onSelectAgent, onCallInitiate
 
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-              Key Screening Requirements
+              Key Requirements
             </label>
             <input
               type="text"
@@ -183,8 +185,25 @@ const VoiceCallTrigger = ({ agents, selectedAgent, onSelectAgent, onCallInitiate
           </div>
         </div>
 
+        {/* Multi-Channel Communication Workflow (Assignment 1 requirement) */}
+        <div className="p-3 rounded-xl bg-dark-950/60 border border-white/[0.06] flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <MessageSquare className="w-4 h-4 text-cyan-400" />
+            <div>
+              <p className="text-xs font-semibold text-slate-200">Multi-Channel Follow-up (WhatsApp/SMS)</p>
+              <p className="text-[11px] text-slate-400">Send interview calendar invite & JD summary post-call</p>
+            </div>
+          </div>
+          <input
+            type="checkbox"
+            checked={sendMultiChannelFollowup}
+            onChange={(e) => setSendMultiChannelFollowup(e.target.checked)}
+            className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 bg-dark-900 border-white/[0.2] cursor-pointer"
+          />
+        </div>
+
         {/* Action Button */}
-        <div className="pt-3">
+        <div className="pt-2">
           <button
             type="submit"
             disabled={loading}

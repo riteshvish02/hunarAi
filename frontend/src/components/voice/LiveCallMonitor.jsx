@@ -6,12 +6,10 @@ import {
   Clock, 
   CheckCircle, 
   XCircle, 
-  UserCheck, 
-  FileText, 
   Sparkles,
   PhoneCall
 } from 'lucide-react';
-import { apiService } from '../services/api';
+import { apiService } from '../../services/api';
 
 const LiveCallMonitor = ({ activeCall, onRefresh }) => {
   const [callDetails, setCallDetails] = useState(activeCall);

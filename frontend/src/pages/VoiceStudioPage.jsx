@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Bot, Loader2, Sparkles, AlertCircle } from 'lucide-react';
-import AgentCardList from './AgentCardList';
-import VoiceCallTrigger from './VoiceCallTrigger';
-import LiveCallMonitor from './LiveCallMonitor';
-import CallHistoryMini from './CallHistoryMini';
+import { Loader2, AlertCircle } from 'lucide-react';
+import AgentCardList from '../components/voice/AgentCardList';
+import VoiceCallTrigger from '../components/voice/VoiceCallTrigger';
+import LiveCallMonitor from '../components/voice/LiveCallMonitor';
+import CallHistoryMini from '../components/voice/CallHistoryMini';
 import { apiService } from '../services/api';
 
-const VoiceStudio = () => {
+const VoiceStudioPage = () => {
   const [agents, setAgents] = useState([]);
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [calls, setCalls] = useState([]);
@@ -14,7 +14,6 @@ const VoiceStudio = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch agents and past calls on mount
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -83,7 +82,7 @@ const VoiceStudio = () => {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-fadeIn">
       {/* Voice Agents Catalog */}
       <AgentCardList
         agents={agents}
@@ -119,4 +118,4 @@ const VoiceStudio = () => {
   );
 };
 
-export default VoiceStudio;
+export default VoiceStudioPage;

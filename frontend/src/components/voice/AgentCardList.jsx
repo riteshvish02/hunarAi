@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, Check, Globe, Mic, Sparkles } from 'lucide-react';
+import { Bot, Check, Globe, Mic } from 'lucide-react';
 
 const AgentCardList = ({ agents, selectedAgent, onSelectAgent }) => {
   return (
