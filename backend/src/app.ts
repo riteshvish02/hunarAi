@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import { ENV } from './config/env';
 import { connectDB } from './config/db';
-import { Pubsub } from './redis/redis';
 import apiRouter from './routes/index';
 import { errorHandler } from './middlewares/errorHandler';
 
@@ -47,9 +46,8 @@ app.get('/', (req, res) => {
 // Global Error Handler
 app.use(errorHandler);
 
-// Initialize DB and Redis
+// Initialize DB
 connectDB();
-Pubsub.getInstance();
 
 const PORT = ENV.PORT;
 app.listen(PORT, () => {

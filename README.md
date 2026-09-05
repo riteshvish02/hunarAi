@@ -49,7 +49,7 @@ Built as an end-to-end assignment for the selection process at **Hunar.AI** by *
 [ Express.js + TypeScript Backend API (Port 5000) ]
        ├── Gemini 2.5 Flash (JD Parsing & Skill Extraction)
        ├── People Search Engine (Apollo / PDL Candidate Matching)
-       ├── MongoDB & Redis (Call Records & State Persistence)
+       ├── MongoDB (Call Records & State Persistence)
        └── Hunar Voice AI Gateway (api.voice.hunar.ai)
              │
              ├── Outbound Telephony (Plivo / Twilio Carrier)
@@ -77,7 +77,7 @@ To ensure full transparency on how data flows across the platform:
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 19, Vite, Tailwind CSS v3, Lucide React, Axios, React Router v7.
-- **Backend**: Node.js, Express, TypeScript, Mongoose (MongoDB), Redis, dotenvx.
+- **Backend**: Node.js, Express, TypeScript, Mongoose (MongoDB), dotenvx.
 - **AI & Voice Services**:
   - **Hunar.AI Voice AI Engine**: Outbound speech agents, telemetry, call results.
   - **Google Gemini 2.5 Flash**: Automated JD understanding & skill extraction.
