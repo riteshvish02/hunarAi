@@ -24,12 +24,17 @@ const CallHistoryMini = ({ calls, onSelectCall, selectedCallId }) => {
           </div>
         ) : (
           calls.slice(0, 15).map((call) => {
-            const isSelected = selectedCallId === call.id;
+            const callId = call.id || call.callId;
+            const isSelected = selectedCallId === callId;
             const isCompleted = call.status === 'COMPLETED';
+            const name = call.callee_name || call.candidateName || 'Candidate';
+            const phone = call.mobile_number || call.mobileNumber || '';
+            const duration = call.duration_seconds || call.durationSeconds || 0;
+            const recording = call.recording_url || call.recordingUrl;
 
             return (
               <div
-                key={call.id}
+                key={callId}
                 onClick={() => onSelectCall(call)}
                 className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
                   isSelected
@@ -47,7 +52,7 @@ const CallHistoryMini = ({ calls, onSelectCall, selectedCallId }) => {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-slate-200">{call.callee_name}</span>
+                      <span className="text-xs font-bold text-slate-200">{name}</span>
                       <span
                         className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full uppercase ${
                           isCompleted
@@ -58,18 +63,18 @@ const CallHistoryMini = ({ calls, onSelectCall, selectedCallId }) => {
                         {call.status}
                       </span>
                     </div>
-                    <span className="text-[11px] font-mono text-slate-400 block">{call.mobile_number}</span>
+                    <span className="text-[11px] font-mono text-slate-400 block">{phone}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  {call.duration_seconds > 0 && (
+                  {duration > 0 && (
                     <span className="text-[11px] text-slate-400 flex items-center gap-1">
                       <Clock className="w-3 h-3" />
-                      {call.duration_seconds}s
+                      {duration}s
                     </span>
                   )}
-                  {call.recording_url && (
+                  {recording && (
                     <span className="text-[10px] text-indigo-400 flex items-center gap-1 font-semibold bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">
                       <Play className="w-2.5 h-2.5 fill-indigo-400" /> Audio
                     </span>

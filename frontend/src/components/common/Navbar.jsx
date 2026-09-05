@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Bot, PhoneCall, Users, BarChart3, Radio } from 'lucide-react';
+import { Mic, Users, BarChart3, Radio, Sparkles } from 'lucide-react';
 import { apiService } from '../../services/api';
 
 const Navbar = () => {
@@ -21,38 +21,35 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
-    { to: '/', label: 'Voice AI Agents', icon: Bot, step: 'Feature 1' },
-    { to: '/people-search', label: 'People Search & JD', icon: Users, step: 'Feature 2' },
-    { to: '/responses', label: 'Call Responses CRM', icon: BarChart3, step: 'Feature 3' },
-    { to: '/attendance', label: '1000-Staff System Design', icon: Radio, step: 'Feature 4' },
+    { to: '/', label: 'Voice Studio', icon: Mic },
+    { to: '/people-search', label: 'People Search', icon: Users },
+    { to: '/responses', label: 'CRM Responses', icon: BarChart3 },
+    { to: '/attendance', label: 'Staff Attendance', icon: Radio },
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/[0.08] bg-dark-950/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-white/[0.07] bg-dark-950/80 backdrop-blur-2xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Brand Logo & Name */}
+          {/* Brand Logo */}
           <NavLink to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 p-0.5 shadow-lg shadow-indigo-500/25 flex items-center justify-center transition-transform group-hover:scale-105">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[1.5px] shadow-lg shadow-indigo-500/20 transition-all duration-300 group-hover:shadow-indigo-500/40 group-hover:scale-105">
               <div className="w-full h-full bg-dark-950 rounded-[10px] flex items-center justify-center">
-                <Bot className="w-5 h-5 text-indigo-400 group-hover:text-indigo-300" />
+                <Sparkles className="w-4 h-4 text-indigo-400 group-hover:text-cyan-300 transition-colors" />
               </div>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-                  Hunar.AI
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-semibold border border-indigo-500/30 uppercase tracking-wider">
-                  Recruiter Suite
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 font-medium">Outbound Hiring & Voice Sourcing Engine</p>
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-base tracking-tight text-white">
+                Hunar<span className="text-indigo-400">.AI</span>
+              </span>
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/25 tracking-wide">
+                Studio
+              </span>
             </div>
           </NavLink>
 
-          {/* Navigation Links with React Router NavLink */}
-          <nav className="hidden md:flex items-center gap-1.5 bg-dark-900/90 p-1.5 rounded-xl border border-white/[0.06]">
+          {/* Clean Modern Navigation Tabs */}
+          <nav className="hidden md:flex items-center gap-1 bg-dark-900/60 p-1 rounded-2xl border border-white/[0.06] shadow-inner">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -61,48 +58,35 @@ const Navbar = () => {
                   to={item.to}
                   end={item.to === '/'}
                   className={({ isActive }) =>
-                    `flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                    `flex items-center gap-2 px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
                       isActive
-                        ? 'bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md shadow-indigo-600/30'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
+                        ? 'bg-white/[0.09] text-white shadow-sm border border-white/[0.1]'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.03]'
                     }`
                   }
                 >
-                  {({ isActive }) => (
-                    <>
-                      <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
-                      <span>{item.label}</span>
-                      <span
-                        className={`text-[9px] px-1.5 py-0.2 rounded font-mono ${
-                          isActive ? 'bg-indigo-900/80 text-indigo-200' : 'bg-white/5 text-slate-500'
-                        }`}
-                      >
-                        {item.step}
-                      </span>
-                    </>
-                  )}
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{item.label}</span>
                 </NavLink>
               );
             })}
           </nav>
 
-          {/* System Health Badge */}
-          <div className="flex items-center gap-2.5">
+          {/* Right Status Indicator */}
+          <div className="flex items-center gap-3">
             <div
-              className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border ${
+              className={`flex items-center gap-2 px-2.5 py-1 rounded-full text-[11px] font-medium border transition-colors ${
                 backendHealthy
-                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                  : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                  ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20'
+                  : 'bg-amber-500/10 text-amber-300 border-amber-500/20'
               }`}
             >
               <span
-                className={`w-2 h-2 rounded-full ${
+                className={`w-1.5 h-1.5 rounded-full ${
                   backendHealthy ? 'bg-emerald-400 beacon-pulse' : 'bg-amber-400'
                 }`}
               />
-              <span className="hidden sm:inline">
-                {backendHealthy ? 'Backend Active (:5000)' : 'Connecting to Backend...'}
-              </span>
+              <span>{backendHealthy ? 'API Connected' : 'Connecting...'}</span>
             </div>
           </div>
         </div>

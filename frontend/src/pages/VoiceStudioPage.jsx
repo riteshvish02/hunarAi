@@ -46,9 +46,42 @@ const VoiceStudioPage = () => {
     fetchData();
   }, []);
 
+  // Background real-time sync for call list every 3.5s
+  useEffect(() => {
+    const pollCalls = async () => {
+      try {
+        const callsRes = await apiService.listCalls({ page_size: 20 });
+        const callList = callsRes.data?.results || [];
+        if (callList.length > 0) {
+          setCalls(callList);
+          setActiveCall((prev) => {
+            if (!prev) return callList[0];
+            const updated = callList.find(
+              (c) => (c.id || c.callId) === (prev.id || prev.callId)
+            );
+            return updated ? { ...prev, ...updated } : prev;
+          });
+        }
+      } catch (err) {
+        // silent background poll
+      }
+    };
+
+    const interval = setInterval(pollCalls, 3500);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleCallInitiated = (newCall) => {
     setActiveCall(newCall);
     setCalls((prev) => [newCall, ...prev]);
+  };
+
+  const handleCallUpdate = (updatedCall) => {
+    setActiveCall(updatedCall);
+    const id = updatedCall.id || updatedCall.callId;
+    setCalls((prev) =>
+      prev.map((c) => ((c.id || c.callId) === id ? { ...c, ...updatedCall } : c))
+    );
   };
 
   const handleSelectCall = (call) => {
@@ -103,14 +136,14 @@ const VoiceStudioPage = () => {
           <CallHistoryMini
             calls={calls}
             onSelectCall={handleSelectCall}
-            selectedCallId={activeCall?.id}
+            selectedCallId={activeCall?.id || activeCall?.callId}
           />
         </div>
 
         {/* Right Column: Live Telemetry, Waveform & Extracted Answers */}
         <div className="lg:col-span-6">
           <div className="sticky top-20">
-            <LiveCallMonitor activeCall={activeCall} onRefresh={setActiveCall} />
+            <LiveCallMonitor activeCall={activeCall} onRefresh={handleCallUpdate} />
           </div>
         </div>
       </div>

@@ -19,9 +19,11 @@ const LiveCallMonitor = ({ activeCall, onRefresh }) => {
     setCallDetails(activeCall);
   }, [activeCall]);
 
-  // Periodic poller while call is active
+  // Periodic real-time poller while call is active
   useEffect(() => {
-    if (!callDetails?.id) return;
+    const targetId = callDetails?.id || callDetails?.callId;
+    if (!targetId) return;
+
     const isFinished = ['COMPLETED', 'FAILED', 'BUSY', 'NO_ANSWER', 'NOT_CONNECTED'].includes(
       callDetails.status
     );
@@ -29,17 +31,18 @@ const LiveCallMonitor = ({ activeCall, onRefresh }) => {
 
     const interval = setInterval(async () => {
       try {
-        const res = await apiService.getCallDetails(callDetails.id);
+        const res = await apiService.getCallDetails(targetId);
         if (res.data) {
           setCallDetails(res.data);
+          if (onRefresh) onRefresh(res.data);
         }
       } catch (err) {
         // quiet poll
       }
-    }, 4000);
+    }, 2000);
 
     return () => clearInterval(interval);
-  }, [callDetails?.id, callDetails?.status]);
+  }, [callDetails?.id, callDetails?.callId, callDetails?.status, onRefresh]);
 
   const handleManualRefresh = async () => {
     if (!callDetails?.id) return;
@@ -116,7 +119,7 @@ const LiveCallMonitor = ({ activeCall, onRefresh }) => {
           </div>
           <div>
             <h3 className="text-base font-bold text-white">Live Call Telemetry</h3>
-            <p className="text-xs text-slate-400 font-mono">ID: {callDetails.id}</p>
+            <p className="text-xs text-slate-400 font-mono">ID: {callDetails.id || callDetails.callId}</p>
           </div>
         </div>
 
@@ -137,23 +140,29 @@ const LiveCallMonitor = ({ activeCall, onRefresh }) => {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
         <div className="p-3 rounded-xl bg-dark-950/60 border border-white/[0.06]">
           <span className="text-[11px] text-slate-400 font-medium block">Candidate</span>
-          <span className="text-sm font-bold text-slate-100">{callDetails.callee_name}</span>
+          <span className="text-sm font-bold text-slate-100 truncate block">
+            {callDetails.callee_name || callDetails.candidateName || 'Candidate'}
+          </span>
         </div>
         <div className="p-3 rounded-xl bg-dark-950/60 border border-white/[0.06]">
           <span className="text-[11px] text-slate-400 font-medium block">Phone</span>
-          <span className="text-sm font-mono font-semibold text-indigo-300">{callDetails.mobile_number}</span>
+          <span className="text-sm font-mono font-semibold text-indigo-300">
+            {callDetails.mobile_number || callDetails.mobileNumber}
+          </span>
         </div>
         <div className="p-3 rounded-xl bg-dark-950/60 border border-white/[0.06]">
           <span className="text-[11px] text-slate-400 font-medium block">Duration</span>
           <span className="text-sm font-bold text-slate-100 flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5 text-slate-400" />
-            {callDetails.duration_seconds ? `${callDetails.duration_seconds}s` : `${callDetails.duration_minutes || 0}m`}
+            {callDetails.duration_seconds || callDetails.durationSeconds
+              ? `${callDetails.duration_seconds || callDetails.durationSeconds}s`
+              : `${callDetails.duration_minutes || 0}m`}
           </span>
         </div>
         <div className="p-3 rounded-xl bg-dark-950/60 border border-white/[0.06]">
           <span className="text-[11px] text-slate-400 font-medium block">Answered By</span>
           <span className="text-sm font-bold text-emerald-300">
-            {callDetails.answered_by || 'Awaiting connection'}
+            {callDetails.answered_by || callDetails.answeredBy || 'Awaiting connection'}
           </span>
         </div>
       </div>
@@ -181,13 +190,13 @@ const LiveCallMonitor = ({ activeCall, onRefresh }) => {
       )}
 
       {/* Audio Recording Player if call completed */}
-      {callDetails.recording_url && (
+      {(callDetails.recording_url || callDetails.recordingUrl) && (
         <div className="p-4 rounded-xl bg-indigo-950/30 border border-indigo-500/30 mb-5">
           <div className="flex items-center gap-2 mb-2">
             <Volume2 className="w-4 h-4 text-indigo-400" />
             <h4 className="text-xs font-bold text-indigo-200">Call Audio Recording</h4>
           </div>
-          <audio controls className="w-full h-9 rounded-lg" src={callDetails.recording_url}>
+          <audio controls className="w-full h-9 rounded-lg" src={callDetails.recording_url || callDetails.recordingUrl}>
             Your browser does not support audio playback.
           </audio>
         </div>

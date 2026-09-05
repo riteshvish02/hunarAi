@@ -46,6 +46,24 @@ export const apiService = {
     const res = await client.get('/calls', { params });
     return res.data;
   },
+
+  // Sourcing & JD Parsing (Gemini 2.5 Flash)
+  parseJd: async (job_description, target_role) => {
+    const res = await client.post('/sourcing/parse-jd', { job_description, target_role });
+    return res.data;
+  },
+
+  // Search Candidates (Apollo / PDL Schema)
+  searchCandidates: async (criteria = {}) => {
+    const res = await client.post('/sourcing/search', criteria);
+    return res.data;
+  },
+
+  // Reach out to candidate via Voice AI
+  reachoutCandidate: async (payload) => {
+    const res = await client.post('/sourcing/reachout', payload);
+    return res.data;
+  },
 };
 
 export default apiService;

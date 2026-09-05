@@ -3,8 +3,8 @@ import { PhoneOutgoing, Loader2, AlertCircle, CheckCircle2, User, Phone, Briefca
 import { apiService } from '../../services/api';
 
 const VoiceCallTrigger = ({ agents, selectedAgent, onSelectAgent, onCallInitiated }) => {
-  const [candidateName, setCandidateName] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [candidateName, setCandidateName] = useState('Ritesh Vishwakarma');
+  const [mobileNumber, setMobileNumber] = useState('+919329586707');
   const [roleTitle, setRoleTitle] = useState('Senior Fullstack Engineer');
   const [keyRequirements, setKeyRequirements] = useState('React, TypeScript, Node.js, 4+ years exp');
   const [sendMultiChannelFollowup, setSendMultiChannelFollowup] = useState(true);
@@ -33,10 +33,13 @@ const VoiceCallTrigger = ({ agents, selectedAgent, onSelectAgent, onCallInitiate
         callee_name: candidateName.trim(),
         mobile_number: mobileNumber.trim(),
         custom_data: {
+          candidate_name: candidateName.trim(),
+          company_name: 'Hunar.AI Hiring',
+          candidate_memory: `${candidateName.trim()} is an experienced candidate applying for ${roleTitle.trim()}. Key requirements: ${keyRequirements.trim()}.`,
           role_title: roleTitle.trim(),
           job_title: roleTitle.trim(),
           key_requirements: keyRequirements.trim(),
-          multichannel_whatsapp: sendMultiChannelFollowup,
+          multichannel_whatsapp: sendMultiChannelFollowup ? 'true' : 'false',
         },
       };
 
